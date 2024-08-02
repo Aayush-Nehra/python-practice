@@ -99,14 +99,23 @@ class SideShooter():
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        self._destroy_aliens_hitting_bullet()
         self.ship.blitme()
+        self._update_bullets()
+        self.aliens.draw(self.screen)
+        pygame.display.flip()
+
+    def _update_bullets(self):
         for bullet in self.bullets.copy():
             if bullet.rect.x >= self.settings.screen_width:
                 self.bullets.remove(bullet)
-        self.aliens.draw(self.screen)
-        pygame.display.flip()
-        
+        if not self.aliens:
+            self.bullets.empty()
+            self._create_fleet()
 
+    def _destroy_aliens_hitting_bullet(self):
+        collisons = pygame.sprite.groupcollide(self.bullets, self.aliens, False, True)
+        
 if __name__ == '__main__':
     side_shooter = SideShooter()
     side_shooter.run_game()

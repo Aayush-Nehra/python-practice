@@ -3,17 +3,24 @@ import pygame
 from bullet import Bullet
 from settings import Settings
 from ship import Ship
+from alien import Alien
 
 class SideShooter():
     def __init__(self):
         pygame.init()
         self.settings = Settings()
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.settings.screen_height,self.settings.screen_width))
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         self.ship = Ship(self)
         pygame.display.set_caption("Side Shooter")
         self.bullets = pygame.sprite.Group()
         self.bullet = Bullet(self)
+        self.aliens = pygame.sprite.Group()
+        self._create_aliens()
+
+    def _create_aliens(self):
+        alien = Alien(self)
+        self.aliens.add(alien)
 
     def run_game(self):
         while True:
@@ -60,6 +67,7 @@ class SideShooter():
         for bullet in self.bullets.copy():
             if bullet.rect.x >= self.settings.screen_width:
                 self.bullets.remove(bullet)
+        self.aliens.draw(self.screen)
         pygame.display.flip()
         
 

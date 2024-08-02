@@ -13,3 +13,7 @@ class Settings():
         self.bullet_width = 5
         self.bullet_speed = 4
         self.no_of_active_bullet = 8
+
+        #alien settings
+        self.alien_speed = 1
+        self.move_down = 1

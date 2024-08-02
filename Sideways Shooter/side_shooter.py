@@ -16,11 +16,27 @@ class SideShooter():
         self.bullets = pygame.sprite.Group()
         self.bullet = Bullet(self)
         self.aliens = pygame.sprite.Group()
-        self._create_aliens()
+        self._create_fleet()
 
-    def _create_aliens(self):
+    def _create_alien(self, x_pos, y_pos):
         alien = Alien(self)
+        alien.x = x_pos
+        alien.y = y_pos
+        alien.rect.y = y_pos
+        alien.rect.x = x_pos
         self.aliens.add(alien)
+
+    def _create_fleet(self):
+        alien = Alien(self)
+        alein_width, alien_height = alien.rect.size
+        current_x, current_y = self.settings.screen_width - 2 * alein_width, alien_height
+        # print(current_x, self.settings.screen_width - 3 * alein_width)
+        while current_x > (self.settings.screen_width - 15 * alein_width):
+            while current_y < (self.settings.screen_height - 2 * alien_height):
+                self._create_alien(current_x, current_y)
+                current_y += 2 * alein_width
+            current_y = alien_height
+            current_x -= 2 * alein_width 
 
     def run_game(self):
         while True:
@@ -28,9 +44,29 @@ class SideShooter():
             #update logic
             self.ship.move_ship()
             self.bullets.update()
+            self._update_aliens()
+            
             #render logic
             self._update_screen()
             self.clock.tick(60)
+
+    def _update_aliens(self):
+        self.aliens.update()
+        self._change_direction_and_drop_alien()
+
+    def _change_direction_and_drop_alien(self):
+        move_towards_ship = False
+        for alien in self.aliens.sprites():
+            if alien.rect.bottom == self.settings.screen_height:
+                self.settings.move_down = -1
+                move_towards_ship = True
+            elif alien.rect.top == 0:
+                self.settings.move_down = 1
+                move_towards_ship = True
+        if move_towards_ship == True:
+            for alien in self.aliens.sprites():
+                alien.rect.x -= self.settings.alien_speed * 10
+            move_towards_ship = False
 
     def _check_events(self):
         for event in pygame.event.get():

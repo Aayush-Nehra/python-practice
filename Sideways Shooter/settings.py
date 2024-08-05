@@ -17,3 +17,5 @@ class Settings():
         #alien settings
         self.alien_speed = 1
         self.move_down = 1
+        #Game statistics
+        self.no_of_lives = 3

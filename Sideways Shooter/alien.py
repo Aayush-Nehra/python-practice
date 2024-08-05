@@ -8,7 +8,6 @@ class Alien(Sprite):
         self.screen = side_shooter.screen
         self.settings = side_shooter.settings
         self.alien_type = "alien" + str(randint(1,5))
-
         self.image = pygame.transform.scale(pygame.image.load("images/"+self.alien_type + ".png"), (40,40))
         self.rect = self.image.get_rect()
 
